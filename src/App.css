@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* background-color: #282c34; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,24 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.MuiDataGrid-cellContent {
+  text-transform: capitalize;
+}
+
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
+  background-color: transparent !important;
+}
+
+.MuiBackdrop-root .MuiModal-backdrop .css-919eu4 {
+  background-color: transparent !important;
+}
+
+.css-919eu4 {
+  background-color: transparent !important;
 }
