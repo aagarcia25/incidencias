@@ -56,12 +56,6 @@ const ButtonsTutorial = ({
       CHID: idmenu,
       NUMOPERACION: 12,
     };
-    // AuthService.AdminAyudas(data).then((res) => {
-    //   if (res.SUCCESS) {
-    //     setDataVideos(res.RESPONSE);
-    //   } else {
-    //   }
-    // });
   };
 
   const handleObtenerPreguntasFrecuentes = (
@@ -72,15 +66,6 @@ const ButtonsTutorial = ({
       CHID: idmenu,
       NUMOPERACION: numeroOperacion,
     };
-    // AuthService.AdminAyudas(data).then((res) => {
-    //   if (res.SUCCESS) {
-    //     if (numeroOperacion == 10) {
-    //       setDataPreguntasFrecuentes(res.RESPONSE);
-    //     } else {
-    //       setDataGuiaRapida(res.RESPONSE);
-    //     }
-    //   }
-    // });
   };
 
   const handleClick = (x: number) => {
