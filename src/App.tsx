@@ -24,6 +24,7 @@ import {
 import { BloqueoSesion } from "./app/componentes/BloqueoSesion";
 import Validacion from "./app/componentes/Validacion";
 import Register from "./app/landing/Register";
+import { Slider } from "@mui/material";
 
 function App() {
   const timeout = 900000;
@@ -137,66 +138,88 @@ function App() {
       console.log("Tipo es Igual a 1");
       setVista(true);
     } else {
-    }
-    /*
-    if (jwt && refjwt && getToken() && getRfToken()) {
-      localStorage.clear();
-    }
-    if (
-      !getToken() &&
-      !getRfToken() &&
-      jwt !== null &&
-      refjwt !== null &&
-      !acceso &&
-      bloqueoStatus === undefined
-    ) {
-      const decoded: UserLogin = jwt_decode(String(jwt));
+      if (jwt && refjwt && getToken() && getRfToken()) {
+        localStorage.clear();
+      }
+      if (
+        !getToken() &&
+        !getRfToken() &&
+        jwt !== null &&
+        refjwt !== null &&
+        !acceso &&
+        bloqueoStatus === undefined
+      ) {
+        const decoded: UserLogin = jwt_decode(String(jwt));
 
-      if ((decoded.exp - Date.now() / 1000) / 60 > 1) {
-        setToken(jwt);
-        setRfToken(refjwt);
-        setIdApp(idapp);
-        var ventana = window.self;
-        ventana.location.replace(String(process.env.REACT_APP_APPLICATION_ENV));
-      } else {
-        Swal.fire({
-          title: "Token no valido",
-          showDenyButton: false,
-          showCancelButton: false,
-          confirmButtonText: "Aceptar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            localStorage.clear();
-            var ventana = window.self;
-            ventana.location.replace(
-              String(process.env.REACT_APP_APPLICATION_BASE_URL_LOGIN)
-            );
-          }
-        });
+        if ((decoded.exp - Date.now() / 1000) / 60 > 1) {
+          setToken(jwt);
+          setRfToken(refjwt);
+          setIdApp(idapp);
+          var ventana = window.self;
+          ventana.location.replace(
+            String(process.env.REACT_APP_APPLICATION_ENV)
+          );
+        } else {
+          Swal.fire({
+            title: "Token no valido",
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "Aceptar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              localStorage.clear();
+              var ventana = window.self;
+              ventana.location.replace(
+                String(process.env.REACT_APP_APPLICATION_BASE_URL_LOGIN)
+              );
+            }
+          });
+        }
+      }
+
+      if (
+        !jwt &&
+        !refjwt &&
+        bloqueoStatus === undefined &&
+        !acceso &&
+        !login &&
+        getToken() &&
+        getRfToken()
+      ) {
+        const decoded: UserLogin = jwt_decode(String(getToken()));
+
+        if ((decoded.exp - Date.now() / 1000) / 60 > 5) {
+          verificatoken(true);
+        } else {
+          handleOnIdle();
+        }
       }
     }
-
-    if (
-      !jwt &&
-      !refjwt &&
-      bloqueoStatus === undefined &&
-      !acceso &&
-      !login &&
-      getToken() &&
-      getRfToken()
-    ) {
-      const decoded: UserLogin = jwt_decode(String(getToken()));
-
-      if ((decoded.exp - Date.now() / 1000) / 60 > 5) {
-        verificatoken(true);
-      } else {
-        handleOnIdle();
-      }
-    }
-    */
   }, [bloqueoStatus]);
 
-  return <div>{vista ? <Register></Register> : "no  "}</div>;
+  return (
+    <div>
+      {vista ? (
+        <Register></Register>
+      ) : (
+        <div>
+          {bloqueoStatus ? (
+            <BloqueoSesion handlePassword={handleOnActive} />
+          ) : acceso ? (
+            <>
+              <HashRouter basename={"/"}>
+                <AppRouter login={login} />
+              </HashRouter>
+            </>
+          ) : !contrseñaValida ? (
+            <Validacion />
+          ) : (
+            ""
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default App;
