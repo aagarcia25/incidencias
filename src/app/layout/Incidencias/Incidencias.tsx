@@ -1,13 +1,54 @@
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Grid, Tooltip, Typography } from "@mui/material";
-import { useState } from "react";
-import TitleComponent from "../../componentes/TitleComponent";
-import ButtonsAdd from "../../componentes/ButtonsAdd";
-import { GridColDef } from "@mui/x-data-grid";
-import MUIXDataGrid from "../../componentes/MUIXDataGrid";
+import { GridColDef, GridCellParams } from "@mui/x-data-grid";
 
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import ButtonsAdd from "../../componentes/ButtonsAdd";
+import { ButtonsDetail } from "../../componentes/ButtonsDetail";
+import MUIXDataGrid from "../../componentes/MUIXDataGrid";
+import TitleComponent from "../../componentes/TitleComponent";
+import { Toast } from "../../helpers/Toast";
+import { IncidenciasServices } from "../../services/IncidenciasServices";
+import RegistroIncidencia from "./RegistroIncidencia";
 const Incidencias = () => {
   const [open, setOpen] = useState(false);
+  const [openModal, setopenModal] = useState(false);
   const [data, setData] = useState([]);
+  const [vrows, setVrows] = useState({});
+  const [tipoOperacion, setTipoOperacion] = useState(0);
+  const handleClose = () => {
+    setopenModal(false);
+  };
+
+  const consulta = () => {
+    setOpen(true);
+    IncidenciasServices.Incidencias({}, 3).then((res) => {
+      if (res.SUCCESS) {
+        Toast.fire({
+          icon: "success",
+          title: "¡Consulta Exitosa!",
+        });
+        console.log(res.RESPONSE);
+        setData(res.RESPONSE);
+        setOpen(false);
+      } else {
+        setOpen(false);
+        Swal.fire("¡Error!", res.STRMESSAGE, "error");
+      }
+    });
+  };
+
+  const handleOpen = () => {
+    setTipoOperacion(1);
+    setopenModal(true);
+  };
+  const handleVer = (data: any) => {
+    console.log(data.row);
+    setVrows(data.row);
+    setTipoOperacion(2);
+    setopenModal(true);
+  };
 
   const columnsRel: GridColDef[] = [
     {
@@ -19,7 +60,49 @@ const Incidencias = () => {
       description: "Fecha de Creación",
       width: 200,
     },
+    {
+      field: "Descripcion",
+      headerName: "Estado",
+      width: 150,
+      cellClassName: (params: GridCellParams) => {
+        // Asigna clase CSS dependiendo del valor del campo
+        return `super-app ${params.value}`;
+      },
+    },
+    { field: "NombreRegistra", headerName: "Registrado Por", width: 200 },
+
+    {
+      field: "acciones",
+      disableExport: true,
+      headerName: "Acciones",
+      description: "",
+      sortable: false,
+      width: 200,
+
+      renderCell: (v) => {
+        return (
+          <>
+            {true ? (
+              <ButtonsDetail
+                title={"Ver Incidencia"}
+                handleFunction={handleVer}
+                show={true}
+                icon={<RemoveRedEyeIcon />}
+                row={v}
+              ></ButtonsDetail>
+            ) : (
+              ""
+            )}
+          </>
+        );
+      },
+    },
   ];
+
+  useEffect(() => {
+    consulta();
+  }, []);
+
   return (
     <>
       <TitleComponent title={"Listado de Incidencias"} show={open} />
@@ -118,10 +201,21 @@ const Incidencias = () => {
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <div style={{ height: 400, width: "100%" }}>
+            <ButtonsAdd handleOpen={handleOpen} agregar={true} />
             <MUIXDataGrid columns={columnsRel} rows={data} />
           </div>
         </Grid>
       </Grid>
+
+      {openModal ? (
+        <RegistroIncidencia
+          tipo={tipoOperacion}
+          handleClose={handleClose}
+          dt={vrows}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 };

@@ -30,7 +30,6 @@ export default function MUIXDataGrid(props: any) {
       caaid: false,
       crid: false,
       idtipo: false,
-      FechaCreacion: false,
       UltimaActualizacion: false,
       creado: false,
       modi: false,
@@ -57,8 +56,6 @@ export default function MUIXDataGrid(props: any) {
           }
           rowsPerPageOptions={[10, 25, 50, 100]}
           disableSelectionOnClick
-          // disableColumnFilter
-          //disableColumnSelector
           disableDensitySelector
           getRowId={(row) => (row.Id ? row.Id : row.id)}
           rowHeight={255}
@@ -68,17 +65,18 @@ export default function MUIXDataGrid(props: any) {
             fontFamily: "Poppins,sans-serif",
             fontWeight: "600",
             fontSize: "12px",
-            // '& .super-app-theme--cell': {
-            //   backgroundColor: 'rgba(224, 183, 60, 0.55)',
-            //   color: '#1a3e72',
-            // },
-            // '& .super-app.negative': {
-            //   color: "rgb(84, 3, 3)",
-            //   backgroundColor: "rgb(196, 40, 40, 0.384)",
-
-            // },
-            "& .super-app.positive": {
-              color: "#000000",
+            "& .super-app.NUEVA": {
+              color: "rgb(84, 3, 3)",
+              backgroundColor: "goldenrod",
+            },
+            "& .super-app.ACEPTADA": {
+              backgroundColor: "yellow",
+            },
+            "& .super-app.ASIGNADA": {
+              backgroundColor: "cyan",
+            },
+            "& .super-app.RESUELTA": {
+              backgroundColor: "green",
             },
           }}
           components={{ Toolbar: GridToolbar }}
