@@ -90,24 +90,24 @@ const RegistroIncidencia = ({
         title={tipo === 1 ? "Agregar Registro" : "Editar Registro"}
         handleClose={handleClose}
       >
-        <Grid container spacing={2} sx={{ padding: "2%" }}>
-          <Grid item xs={12} sm={6} md={3}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={2}>
             <Typography>Clave:</Typography>
             <Typography>{id}</Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2}>
             <Typography>Fecha de Registro:</Typography>
             <Typography>{fechaRegistro}</Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2}>
             <Typography>Nombre:</Typography>
             <Typography>{NombreRegistra}</Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2}>
             <Typography>Email Registra:</Typography>
             <Typography>{EmailRegistra}</Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12} sm={12} md={2}>
             <Button
               onClick={sendIncidence}
               variant="contained"
@@ -118,6 +118,25 @@ const RegistroIncidencia = ({
           </Grid>
         </Grid>
 
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography>Asignado a :</Typography>
+            <Typography>{}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography>Prioridad:</Typography>
+            <Typography>{}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography>Nombre:</Typography>
+            <Typography>{NombreRegistra}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography>Email Registra:</Typography>
+            <Typography>{EmailRegistra}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={2}></Grid>
+        </Grid>
         <Grid container spacing={2} sx={{ padding: "2%" }}>
           <Grid item xs={12}>
             <ReactQuill
