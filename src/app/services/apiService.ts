@@ -50,7 +50,7 @@ export const get = async function (url: any, params: any = {}) {
   try {
     let resp = await axios.get(
       process.env.REACT_APP_APPLICATION_BASE_URL + url,
-      { ...header, params }
+      { ...header, params: params }
     );
     return handleResponse(resp.data);
   } catch (err: any) {

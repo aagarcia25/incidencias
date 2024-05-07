@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   Button,
   Grid,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -14,6 +15,14 @@ import Swal from "sweetalert2";
 import ModalForm from "../../componentes/ModalForm";
 import { Toast } from "../../helpers/Toast";
 import { IncidenciasServices } from "../../services/IncidenciasServices";
+import SelectFrag from "../../componentes/SelectFrag";
+import SelectValues from "../../interfaces/Share";
+import { getEstado, getPrioridad, getUsuarioInci } from "../../services/SelectServices";
+import { USUARIORESPONSE } from "../../interfaces/UserInfo";
+import { getUser } from "../../services/localStorage";
+import { GridCellParams, GridColDef } from "@mui/x-data-grid";
+import MUIXDataGrid from "../../componentes/MUIXDataGrid";
+import { log } from "console";
 const RegistroIncidencia = ({
   handleClose,
   tipo,
@@ -23,64 +32,168 @@ const RegistroIncidencia = ({
   handleClose: Function;
   dt: any;
 }) => {
+  const user: USUARIORESPONSE = JSON.parse(String(getUser()));
+
   const [id, setId] = useState("");
   const [content, setContent] = useState("");
   const [NombreRegistra, setNombreRegistra] = useState("");
   const [EmailRegistra, setEmailRegistra] = useState("");
   const [fechaRegistro, setfechaRegistro] = useState("");
+  const [ListEstado, setListEstado] = useState<SelectValues[]>([]);
+  const [estado, setEstado] = useState("");
+  const [ListUsuarioInci, setListUsuarioInci] = useState<SelectValues[]>([]);
+  const [usuarioInci, setUsuarioInci] = useState("");
+  const [ListPrioridad, setListPrioridad] = useState<SelectValues[]>([]);
+  const [prioridad, setPrioridad] = useState("");
+  const [nota, setNota] = useState("");
+
+  const [data, setData] = useState([]);
+
+  const consulta = () => {
+    console.log("dt.id",dt.Id);
+    
+    let data = {IdIncidencia: dt.Id}
+    // setOpen(true);
+    IncidenciasServices.Incidencias(data, 5).then((res) => {
+      if (res.SUCCESS) {
+        Toast.fire({
+          icon: "success",
+          title: "¡Consulta Exitosa!",
+        });
+        console.log(res.RESPONSE);
+        setData(res.RESPONSE);
+        //setOpen(false);
+      } else {
+        //setOpen(false);
+        Swal.fire("¡Error!", res.STRMESSAGE, "error");
+      }
+    });
+  };
+
+  const columnsRel: GridColDef[] = [
+    {
+      field: "id",
+    },
+    {
+      field: "FechaCreacion",
+      headerName: "Fecha de Creación",
+      description: "Fecha de Creación",
+      width: 200,
+    },
+    {
+      field: "ceDescripcion",
+      headerName: "Estado",
+      width: 150,
+      cellClassName: (params: GridCellParams) => {
+        // Asigna clase CSS dependiendo del valor del campo
+        return `super-app ${params.value}`;
+      },
+    },
+    { field: "Observaciones", headerName: "Observaciones", width: 150 },
+    { field: "modificadopor", headerName: "Actualizado por", width: 150 },   
+
+     
+  ];
 
   const handleChange = (value: any) => {
-    setContent(value);
+    setContent( value);
   };
 
   const sendIncidence = () => {
-    if (NombreRegistra != "" && EmailRegistra != "" && content != "") {
+    console.log("usuarioInci",usuarioInci);
+    
       let data = {
-        Estatus: "86855e1c-fcd1-11ee-b2e9-c4346b72f0ba",
+      CHID: id,
+
+        Estatus: estado,
         TextoInc: content,
         NombreRegistra: NombreRegistra,
         EmailRegistra: EmailRegistra,
-        IdUsuario: "30adc962-7109-11ed-a880-040300000000",
+        CHUSER: user.Id,
+        AsignadoA: usuarioInci,
+        Prioridades: prioridad,
       };
 
       console.log(data);
 
-      IncidenciasServices.Incidencias(data, 1).then((res) => {
+      IncidenciasServices.Incidencias(data, 4).then((res) => {
         if (res.SUCCESS) {
           Toast.fire({
             icon: "success",
-            title: "¡Incidencia Enviada!",
+            title: "¡Incidencia Actualizada!",
           });
-          setContent("");
-          setNombreRegistra("");
-          setEmailRegistra("");
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
       });
-    } else {
-      Swal.fire({
-        title: "Favor de completar los siguientes campos:",
-        html: `
-              <ul>
-              <li>Nombre</li>
-             <li>Correo Electrónico</li>
-             <li>Descripción de la Incidencia</li>
-              </ul>
-            `,
-        icon: "warning",
-      });
-    }
+   consulta();
   };
 
+const sendNota = () => {
+    let data = {
+      CHID: id,
+      Observaciones: nota,
+      CHUSER: user.Id,
+      Estatus: dt.ceId,
+    };
+    console.log("data",data);
+    
+
+    IncidenciasServices.Incidencias(data,4).then(
+      (res) => {
+        if (res.SUCCESS) {
+          Toast.fire({
+            icon: "success",
+            title: "Nota Agregada!",
+          });
+          setNota("")
+          handleClose();
+        } else {
+          Swal.fire(res.STRMESSAGE, "¡Error!", "info");
+        }
+      }
+    )
+
+    
+    
+  
+  
+ }
+
+  const handleFilterEstado = (v: any) => {
+    setEstado(v);
+  };
+  const handleFilterUsuarioInci = (v: any) => {
+    setUsuarioInci(v);
+  };
+  const handleFilterPrioridad = (v: any) => {
+    setPrioridad(v);
+  };
+
+
+  
+
+  
+
   useEffect(() => {
+    getEstado(setListEstado)
+    getUsuarioInci(setListUsuarioInci)
+    getPrioridad(setListPrioridad)
+    console.log("dt",dt);
+    consulta();
+
+    
     if (dt === "") {
-    } else {
+    } else { 
+     
       setId(dt?.Id);
       setContent(dt?.TextoInc);
       setNombreRegistra(dt?.NombreRegistra);
       setEmailRegistra(dt?.EmailRegistra);
       setfechaRegistro(dt?.FechaCreacion);
+      setUsuarioInci(dt.idAsignadoa);
+      setPrioridad(dt.prId);
+      setEstado(dt.ceId);
     }
   }, [dt]);
 
@@ -121,11 +234,23 @@ const RegistroIncidencia = ({
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={2}>
             <Typography>Asignado a :</Typography>
-            <Typography>{}</Typography>
+            <SelectFrag
+                value={usuarioInci}
+                options={ListUsuarioInci}
+                onInputChange={handleFilterUsuarioInci}
+                placeholder={"Seleccione.."}
+                disabled={false} 
+                />
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
             <Typography>Prioridad:</Typography>
-            <Typography>{}</Typography>
+            <SelectFrag
+                value={prioridad}
+                options={ListPrioridad}
+                onInputChange={handleFilterPrioridad}
+                placeholder={"Seleccione.."}
+                disabled={false} 
+                />
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
             <Typography>Nombre:</Typography>
@@ -135,7 +260,16 @@ const RegistroIncidencia = ({
             <Typography>Email Registra:</Typography>
             <Typography>{EmailRegistra}</Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={2}></Grid>
+          <Grid item xs={12} sm={12} md={2}>
+          <Typography>Estado:</Typography>
+          <SelectFrag
+                value={estado}
+                options={ListEstado}
+                onInputChange={handleFilterEstado}
+                placeholder={"Seleccione.."}
+                disabled={false} 
+                />
+          </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ padding: "2%" }}>
           <Grid item xs={12}>
@@ -159,11 +293,27 @@ const RegistroIncidencia = ({
                 <Typography>Notas</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
+              <TextField
+                id="outlined-multiline-static"
+                label="Escribe una nota"
+                multiline
+                fullWidth
+                variant="standard"
+                rows={5}
+                value={nota}
+                onChange={(v) => setNota(v.target.value)}
+                disabled={false}
+
+              />
+              <Grid item alignItems="center" justifyContent="center" xs={12} paddingTop={2} sx={{ display: "flex" }}>
+              <Button
+                  // disabled={descripcion === "" || nombre === ""}
+                  className={"actualizar"}
+                  onClick={() => sendNota()}
+                >
+                  {"Agregar Nota"}
+                </Button>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>
@@ -177,11 +327,7 @@ const RegistroIncidencia = ({
                 <Typography>Historial</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
+              <MUIXDataGrid columns={columnsRel} rows={data} />
               </AccordionDetails>
             </Accordion>
           </Grid>
