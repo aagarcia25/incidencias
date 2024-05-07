@@ -55,3 +55,17 @@ export const getEstadoNext = (setState: Function, TIPO: string) => {
       setState(r.data.RESPONSE);
     });
 };
+
+export const getSLA = (setState: Function, CHID: string) => {
+  axios
+    .get(process.env.REACT_APP_APPLICATION_BASE_URL + "getSLA", {
+      params: { CHID },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("jwtToken") || "",
+      },
+    })
+    .then((r) => {
+      setState(r.data.RESPONSE[0].tiempo);
+    });
+};

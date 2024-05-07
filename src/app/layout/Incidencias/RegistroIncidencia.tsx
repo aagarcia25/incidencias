@@ -9,24 +9,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import Swal from "sweetalert2";
+import MUIXDataGrid from "../../componentes/MUIXDataGrid";
 import ModalForm from "../../componentes/ModalForm";
-import { Toast } from "../../helpers/Toast";
-import { IncidenciasServices } from "../../services/IncidenciasServices";
 import SelectFrag from "../../componentes/SelectFrag";
+import { Toast } from "../../helpers/Toast";
 import SelectValues from "../../interfaces/Share";
+import { USUARIORESPONSE } from "../../interfaces/UserInfo";
+import { IncidenciasServices } from "../../services/IncidenciasServices";
 import {
-  getEstado,
   getEstadoNext,
   getPrioridad,
+  getSLA,
   getUsuarioInci,
 } from "../../services/SelectServices";
-import { USUARIORESPONSE } from "../../interfaces/UserInfo";
 import { getUser } from "../../services/localStorage";
-import { GridCellParams, GridColDef } from "@mui/x-data-grid";
-import MUIXDataGrid from "../../componentes/MUIXDataGrid";
+import KPI from "../../componentes/KPI";
+
 const RegistroIncidencia = ({
   handleClose,
   tipo,
@@ -50,6 +52,7 @@ const RegistroIncidencia = ({
   const [ListPrioridad, setListPrioridad] = useState<SelectValues[]>([]);
   const [prioridad, setPrioridad] = useState("");
   const [nota, setNota] = useState("");
+  const [sla, setsla] = useState("");
 
   const [data, setData] = useState([]);
 
@@ -199,6 +202,16 @@ const RegistroIncidencia = ({
       setUsuarioInci(dt.idAsignadoa);
       setPrioridad(dt.prId);
       setEstado(dt.ceId);
+      if (
+        dt.ceDescripcion != "RESUELTA" &&
+        dt.ceDescripcion != "NUEVA" &&
+        dt.ceDescripcion != ""
+      ) {
+        const intervalId = setInterval(() => {
+          getSLA(setsla, dt?.Id); // Ejecuta la función cada 2 segundos
+        }, 2000); // Intervalo de 2 segundos (2000 milisegundos)
+        return () => clearInterval(intervalId);
+      }
     }
   }, [dt]);
 
@@ -283,7 +296,9 @@ const RegistroIncidencia = ({
               </>
             )}
           </Grid>
-          <Grid item xs={12} sm={12} md={2}></Grid>
+          <Grid item xs={12} sm={12} md={2}>
+            {sla != "" ? <KPI label="Tiempo de Atención" value={sla} /> : ""}
+          </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ padding: "2%" }}>
           <Grid item xs={12}>
