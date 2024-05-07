@@ -143,6 +143,7 @@ const RegistroIncidencia = ({
             icon: "success",
             title: "¡Incidencia Actualizada!",
           });
+          consulta();
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
@@ -158,6 +159,12 @@ const RegistroIncidencia = ({
         Observaciones: nota,
         CHUSER: user.Id,
         Estatus: dt.ceId,
+        EmailRegistra: dt.EmailRegistra,
+        NombreRegistra: dt.NombreRegistra,
+        TextoInc: dt.TextoInc,
+        AsignadoA: dt.idAsignadoa,
+        Prioridades: dt.prId,
+
       };
       console.log("data", data);
 
@@ -168,6 +175,7 @@ const RegistroIncidencia = ({
             title: "Nota Agregada!",
           });
           setNota("");
+          consulta();
         } else {
           Swal.fire(res.STRMESSAGE, "¡Error!", "info");
         }

@@ -193,6 +193,27 @@ const Incidencias = () => {
           md={2}
           lg={1}
           style={{
+            backgroundColor: "greenyellow",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%", // Para asegurar la altura completa del Grid
+          }}
+        >
+          <Tooltip
+            title="Cuando la incidencia ha sido solucionada, se mueve a este estado. Resuelta significa que el problema o error ha sido corregido, o que la solicitud ha sido atendida satisfactoriamente. Sin embargo, esto no necesariamente implica que el ciclo de vida de la incidencia haya terminado. Dependiendo del proceso, puede requerir validación o confirmación del usuario para cerrar la incidencia definitivamente."
+            placement="top-start"
+          >
+            <Typography>En Proceso</Typography>
+          </Tooltip>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={1}
+          style={{
             backgroundColor: "green",
             display: "flex",
             justifyContent: "center",

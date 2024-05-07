@@ -82,6 +82,10 @@ export default function MUIXDataGrid(props: any) {
               color: "rgb(84, 3, 3)",
               backgroundColor: "orangered",
             },
+            "& .super-app.EN.PROCESO": {
+              color: "rgb(84, 3, 3)",
+              backgroundColor: "greenyellow",
+            },
           }}
           components={{ Toolbar: GridToolbar }}
           componentsProps={{
