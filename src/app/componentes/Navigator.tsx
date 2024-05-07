@@ -184,7 +184,7 @@ export default function Navigator(props: DrawerProps, logoFijo: any) {
             })}
           </List>
         </div>
-        <ListItemButton onClick={() => onLogOut}>
+        <ListItemButton onClick={() => onLogOut()}>
           <ListItemIcon>
             <PowerSettingsNewIcon />
           </ListItemIcon>
