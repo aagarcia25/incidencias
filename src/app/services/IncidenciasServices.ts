@@ -12,6 +12,8 @@ export class IncidenciasServices {
       return await put("Incidencias", data);
     } else if (tipo == 5) {
       return await get("HistorialIncidencias", data);
+    } else if (tipo == 6) {
+      return await get("Incidenciasbyuser", data);
     } else {
       return {
         RESPONSE: null,
