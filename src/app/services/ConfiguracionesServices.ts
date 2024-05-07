@@ -19,4 +19,8 @@ export class ConfiguracionesServices {
       };
     }
   }
+
+  public static async getEstadisticas() {
+    return await get("getEstadisticas");
+  }
 }
