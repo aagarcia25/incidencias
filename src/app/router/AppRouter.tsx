@@ -8,6 +8,7 @@ import { getUser } from "../services/localStorage";
 import { AuthRouter } from "./AuthRouter";
 import Estadisticas from "../layout/Panel/Estadisticas";
 import Config from "../layout/Configuracion/Config";
+import IncidenciasByUser from "../layout/Incidencias/IncidenciasByUser";
 
 export const AppRouter = ({ login }: { login: boolean }) => {
   const log = login;
@@ -33,6 +34,11 @@ export const AppRouter = ({ login }: { login: boolean }) => {
         <Route
           path="/pladin/configuraciones"
           element={log ? <Config /> : <AuthRouter />}
+        />
+
+        <Route
+          path="/pladin/Incidenciasbyuser"
+          element={log ? <IncidenciasByUser /> : <AuthRouter />}
         />
       </Routes>
     </Inicio>

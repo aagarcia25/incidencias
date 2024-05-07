@@ -17,12 +17,16 @@ import { Toast } from "../../helpers/Toast";
 import { IncidenciasServices } from "../../services/IncidenciasServices";
 import SelectFrag from "../../componentes/SelectFrag";
 import SelectValues from "../../interfaces/Share";
-import { getEstado, getPrioridad, getUsuarioInci } from "../../services/SelectServices";
+import {
+  getEstado,
+  getEstadoNext,
+  getPrioridad,
+  getUsuarioInci,
+} from "../../services/SelectServices";
 import { USUARIORESPONSE } from "../../interfaces/UserInfo";
 import { getUser } from "../../services/localStorage";
 import { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import MUIXDataGrid from "../../componentes/MUIXDataGrid";
-import { log } from "console";
 const RegistroIncidencia = ({
   handleClose,
   tipo,
@@ -50,9 +54,9 @@ const RegistroIncidencia = ({
   const [data, setData] = useState([]);
 
   const consulta = () => {
-    console.log("dt.id",dt.Id);
-    
-    let data = {IdIncidencia: dt.Id}
+    console.log("dt.id", dt.Id);
+
+    let data = { IdIncidencia: dt.Id };
     // setOpen(true);
     IncidenciasServices.Incidencias(data, 5).then((res) => {
       if (res.SUCCESS) {
@@ -90,21 +94,35 @@ const RegistroIncidencia = ({
       },
     },
     { field: "Observaciones", headerName: "Observaciones", width: 150 },
-    { field: "modificadopor", headerName: "Actualizado por", width: 150 },   
-
-     
+    { field: "modificadopor", headerName: "Actualizado por", width: 150 },
   ];
 
   const handleChange = (value: any) => {
-    setContent( value);
+    setContent(value);
   };
 
   const sendIncidence = () => {
-    console.log("usuarioInci",usuarioInci);
-    
-      let data = {
-      CHID: id,
+    console.log("usuarioInci", usuarioInci);
+    let validacion = true;
 
+    if (estado == "") {
+      validacion = false;
+      Swal.fire("¡Error!", "Favor de Seleccionar el siguiente Estado", "error");
+    }
+
+    if (usuarioInci == "") {
+      validacion = false;
+      Swal.fire("¡Error!", "Favor de Seleccionar a quien se asigna", "error");
+    }
+
+    if (prioridad == "") {
+      validacion = false;
+      Swal.fire("¡Error!", "Favor de Seleccionar la Prioridad", "error");
+    }
+
+    if (validacion) {
+      let data = {
+        CHID: id,
         Estatus: estado,
         TextoInc: content,
         NombreRegistra: NombreRegistra,
@@ -126,39 +144,33 @@ const RegistroIncidencia = ({
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
       });
-   consulta();
+      consulta();
+    }
   };
 
-const sendNota = () => {
-    let data = {
-      CHID: id,
-      Observaciones: nota,
-      CHUSER: user.Id,
-      Estatus: dt.ceId,
-    };
-    console.log("data",data);
-    
+  const sendNota = () => {
+    if (nota !== "") {
+      let data = {
+        CHID: id,
+        Observaciones: nota,
+        CHUSER: user.Id,
+        Estatus: dt.ceId,
+      };
+      console.log("data", data);
 
-    IncidenciasServices.Incidencias(data,4).then(
-      (res) => {
+      IncidenciasServices.Incidencias(data, 4).then((res) => {
         if (res.SUCCESS) {
           Toast.fire({
             icon: "success",
             title: "Nota Agregada!",
           });
-          setNota("")
-          handleClose();
+          setNota("");
         } else {
           Swal.fire(res.STRMESSAGE, "¡Error!", "info");
         }
-      }
-    )
-
-    
-    
-  
-  
- }
+      });
+    }
+  };
 
   const handleFilterEstado = (v: any) => {
     setEstado(v);
@@ -170,22 +182,15 @@ const sendNota = () => {
     setPrioridad(v);
   };
 
-
-  
-
-  
-
   useEffect(() => {
-    getEstado(setListEstado)
-    getUsuarioInci(setListUsuarioInci)
-    getPrioridad(setListPrioridad)
-    console.log("dt",dt);
+    getEstadoNext(setListEstado, dt.ceDescripcion);
+    getUsuarioInci(setListUsuarioInci);
+    getPrioridad(setListPrioridad);
+    console.log("dt", dt);
     consulta();
 
-    
     if (dt === "") {
-    } else { 
-     
+    } else {
       setId(dt?.Id);
       setContent(dt?.TextoInc);
       setNombreRegistra(dt?.NombreRegistra);
@@ -221,13 +226,19 @@ const sendNota = () => {
             <Typography>{EmailRegistra}</Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={2}>
-            <Button
-              onClick={sendIncidence}
-              variant="contained"
-              endIcon={<SyncIcon />}
-            >
-              Actualizar Incidencia
-            </Button>
+            {dt.ceDescripcion == "RESUELTA" ? (
+              ""
+            ) : (
+              <>
+                <Button
+                  onClick={sendIncidence}
+                  variant="contained"
+                  endIcon={<SyncIcon />}
+                >
+                  Actualizar Incidencia
+                </Button>
+              </>
+            )}
           </Grid>
         </Grid>
 
@@ -235,41 +246,44 @@ const sendNota = () => {
           <Grid item xs={12} sm={6} md={2}>
             <Typography>Asignado a :</Typography>
             <SelectFrag
-                value={usuarioInci}
-                options={ListUsuarioInci}
-                onInputChange={handleFilterUsuarioInci}
-                placeholder={"Seleccione.."}
-                disabled={false} 
-                />
+              value={usuarioInci}
+              options={ListUsuarioInci}
+              onInputChange={handleFilterUsuarioInci}
+              placeholder={"Seleccione.."}
+              disabled={dt.ceDescripcion == "NUEVA" ? false : true}
+            />
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
             <Typography>Prioridad:</Typography>
             <SelectFrag
-                value={prioridad}
-                options={ListPrioridad}
-                onInputChange={handleFilterPrioridad}
-                placeholder={"Seleccione.."}
-                disabled={false} 
-                />
+              value={prioridad}
+              options={ListPrioridad}
+              onInputChange={handleFilterPrioridad}
+              placeholder={"Seleccione.."}
+              disabled={dt.ceDescripcion == "NUEVA" ? false : true}
+            />
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
-            <Typography>Nombre:</Typography>
-            <Typography>{NombreRegistra}</Typography>
+            <Typography>Estado Actual:</Typography>
+            {dt.ceDescripcion}
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
-            <Typography>Email Registra:</Typography>
-            <Typography>{EmailRegistra}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2}>
-          <Typography>Estado:</Typography>
-          <SelectFrag
-                value={estado}
-                options={ListEstado}
-                onInputChange={handleFilterEstado}
-                placeholder={"Seleccione.."}
-                disabled={false} 
+            {dt.ceDescripcion == "RESUELTA" ? (
+              ""
+            ) : (
+              <>
+                <Typography>Sguiente Estado:</Typography>
+                <SelectFrag
+                  value={estado}
+                  options={ListEstado}
+                  onInputChange={handleFilterEstado}
+                  placeholder={"Seleccione.."}
+                  disabled={false}
                 />
+              </>
+            )}
           </Grid>
+          <Grid item xs={12} sm={12} md={2}></Grid>
         </Grid>
         <Grid container spacing={2} sx={{ padding: "2%" }}>
           <Grid item xs={12}>
@@ -293,26 +307,32 @@ const sendNota = () => {
                 <Typography>Notas</Typography>
               </AccordionSummary>
               <AccordionDetails>
-              <TextField
-                id="outlined-multiline-static"
-                label="Escribe una nota"
-                multiline
-                fullWidth
-                variant="standard"
-                rows={5}
-                value={nota}
-                onChange={(v) => setNota(v.target.value)}
-                disabled={false}
-
-              />
-              <Grid item alignItems="center" justifyContent="center" xs={12} paddingTop={2} sx={{ display: "flex" }}>
-              <Button
-                  // disabled={descripcion === "" || nombre === ""}
-                  className={"actualizar"}
-                  onClick={() => sendNota()}
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Escribe una nota"
+                  multiline
+                  fullWidth
+                  variant="standard"
+                  rows={5}
+                  value={nota}
+                  onChange={(v) => setNota(v.target.value)}
+                  disabled={dt.ceDescripcion == "RESUELTA" ? true : false}
+                />
+                <Grid
+                  item
+                  alignItems="center"
+                  justifyContent="center"
+                  xs={12}
+                  paddingTop={2}
+                  sx={{ display: "flex" }}
                 >
-                  {"Agregar Nota"}
-                </Button>
+                  <Button
+                    disabled={dt.ceDescripcion == "RESUELTA" ? true : false}
+                    className={"actualizar"}
+                    onClick={() => sendNota()}
+                  >
+                    {"Agregar Nota"}
+                  </Button>
                 </Grid>
               </AccordionDetails>
             </Accordion>
@@ -327,7 +347,7 @@ const sendNota = () => {
                 <Typography>Historial</Typography>
               </AccordionSummary>
               <AccordionDetails>
-              <MUIXDataGrid columns={columnsRel} rows={data} />
+                <MUIXDataGrid columns={columnsRel} rows={data} />
               </AccordionDetails>
             </Accordion>
           </Grid>
