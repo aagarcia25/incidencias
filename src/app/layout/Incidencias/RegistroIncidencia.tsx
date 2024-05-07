@@ -164,7 +164,6 @@ const RegistroIncidencia = ({
         TextoInc: dt.TextoInc,
         AsignadoA: dt.idAsignadoa,
         Prioridades: dt.prId,
-
       };
       console.log("data", data);
 
@@ -213,6 +212,7 @@ const RegistroIncidencia = ({
       if (
         dt.ceDescripcion != "RESUELTA" &&
         dt.ceDescripcion != "NUEVA" &&
+        dt.ceDescripcion != "CANCELADA" &&
         dt.ceDescripcion != ""
       ) {
         const intervalId = setInterval(() => {
@@ -247,7 +247,8 @@ const RegistroIncidencia = ({
             <Typography>{EmailRegistra}</Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={2}>
-            {dt.ceDescripcion == "RESUELTA" ? (
+            {dt.ceDescripcion == "RESUELTA" ||
+            dt.ceDescripcion == "CANCELADA" ? (
               ""
             ) : (
               <>
@@ -289,7 +290,8 @@ const RegistroIncidencia = ({
             {dt.ceDescripcion}
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
-            {dt.ceDescripcion == "RESUELTA" ? (
+            {dt.ceDescripcion == "RESUELTA" ||
+            dt.ceDescripcion == "CANCELADA" ? (
               ""
             ) : (
               <>
@@ -350,7 +352,12 @@ const RegistroIncidencia = ({
                   sx={{ display: "flex" }}
                 >
                   <Button
-                    disabled={dt.ceDescripcion == "RESUELTA" ? true : false}
+                    disabled={
+                      dt.ceDescripcion == "RESUELTA" ||
+                      dt.ceDescripcion == "CANCELADA"
+                        ? true
+                        : false
+                    }
                     className={"actualizar"}
                     onClick={() => sendNota()}
                   >
