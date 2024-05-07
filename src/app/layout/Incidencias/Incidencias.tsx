@@ -61,7 +61,7 @@ const Incidencias = () => {
       width: 200,
     },
     {
-      field: "Descripcion",
+      field: "ceDescripcion",
       headerName: "Estado",
       width: 150,
       cellClassName: (params: GridCellParams) => {
@@ -70,7 +70,8 @@ const Incidencias = () => {
       },
     },
     { field: "NombreRegistra", headerName: "Registrado Por", width: 200 },
-
+    { field: "asignadoa", headerName: "Asignado a", width: 200 },
+    { field: "prDescripcion", headerName: "Prioridad", width: 200 },
     {
       field: "acciones",
       disableExport: true,
@@ -100,6 +101,8 @@ const Incidencias = () => {
   ];
 
   useEffect(() => {
+    console.log("data",data);
+    
     consulta();
   }, []);
 
@@ -124,7 +127,12 @@ const Incidencias = () => {
           sm={2}
           md={2}
           lg={1}
-          style={{ backgroundColor: "goldenrod" }}
+          style={{ backgroundColor: "goldenrod" ,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          }}
         >
           <Tooltip
             title="Una incidencia recién creada, pendiente de revisión. Este estado indica que el problema, error o solicitud ha sido registrado en la plataforma, pero aún no ha sido evaluado por el equipo responsable. Se espera que las incidencias en este estado sean revisadas para asignarlas a la persona o equipo adecuado y para determinar la prioridad."
@@ -139,7 +147,12 @@ const Incidencias = () => {
           sm={2}
           md={2}
           lg={1}
-          style={{ backgroundColor: "yellow" }}
+          style={{ backgroundColor: "yellow" ,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          }}
         >
           <Tooltip
             title="Una vez que se ha revisado la incidencia y se ha decidido que es válida, se mueve a este estado. Aceptada significa que el equipo responsable ha reconocido el problema y se compromete a abordarlo. Aquí, se puede asignar una prioridad a la incidencia y planificar las próximas acciones para su resolución."
@@ -154,7 +167,12 @@ const Incidencias = () => {
           sm={2}
           md={2}
           lg={1}
-          style={{ backgroundColor: "cyan" }}
+          style={{ backgroundColor: "cyan" ,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          }}
         >
           <Tooltip
             title="En este estado, la incidencia ya ha sido asignada a un miembro específico del equipo o a un grupo para su resolución. Esto significa que hay una persona o equipo responsable de trabajar en la solución del problema. Este estado también puede incluir información adicional sobre el progreso y el tiempo estimado para la resolución."
@@ -182,6 +200,27 @@ const Incidencias = () => {
             placement="top-start"
           >
             <Typography>Resuelta</Typography>
+          </Tooltip>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={1}
+          style={{
+            backgroundColor: "orangered",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%", // Para asegurar la altura completa del Grid
+          }}
+        >
+          <Tooltip
+            title="Cuando la incidencia se mueve a este estado, significa que a la Incidencia le hace falta información para que pueda ser asignada al área correspondiente o hace falta algún dato específico para que se pueda atender."
+            placement="top-start"
+          >
+            <Typography>Cancelada</Typography>
           </Tooltip>
         </Grid>
       </Grid>

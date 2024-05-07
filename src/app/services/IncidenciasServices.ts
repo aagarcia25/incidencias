@@ -10,6 +10,8 @@ export class IncidenciasServices {
       return await get("Incidencias", data);
     } else if (tipo == 4) {
       return await put("Incidencias", data);
+    } else if (tipo == 5) {
+      return await get("HistorialIncidencias", data);
     } else {
       return {
         RESPONSE: null,

@@ -78,6 +78,10 @@ export default function MUIXDataGrid(props: any) {
             "& .super-app.RESUELTA": {
               backgroundColor: "green",
             },
+            "& .super-app.CANCELADA": {
+              color: "rgb(84, 3, 3)",
+              backgroundColor: "orangered",
+            },
           }}
           components={{ Toolbar: GridToolbar }}
           componentsProps={{
