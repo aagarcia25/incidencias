@@ -135,7 +135,6 @@ function App() {
 
   useLayoutEffect(() => {
     if (tipo == "1") {
-      console.log("Tipo es Igual a 1");
       setVista(true);
     } else {
       if (jwt && refjwt && getToken() && getRfToken()) {

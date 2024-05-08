@@ -33,7 +33,6 @@ const Estadisticas = () => {
       ConfiguracionesServices.getEstadisticas().then((res) => {
         if (res?.SUCCESS) {
           setlist(res.RESPONSE);
-          console.log("Lista de estadísticas:", res.RESPONSE);
         }
       });
     };

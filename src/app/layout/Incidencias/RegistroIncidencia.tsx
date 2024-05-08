@@ -25,6 +25,7 @@ import {
   getPrioridad,
   getSLA,
   getUsuarioInci,
+  sendMail,
 } from "../../services/SelectServices";
 import { getUser } from "../../services/localStorage";
 import KPI from "../../componentes/KPI";
@@ -53,25 +54,18 @@ const RegistroIncidencia = ({
   const [prioridad, setPrioridad] = useState("");
   const [nota, setNota] = useState("");
   const [sla, setsla] = useState("");
-
   const [data, setData] = useState([]);
 
   const consulta = () => {
-    console.log("dt.id", dt.Id);
-
     let data = { IdIncidencia: dt.Id };
-    // setOpen(true);
     IncidenciasServices.Incidencias(data, 5).then((res) => {
       if (res.SUCCESS) {
         Toast.fire({
           icon: "success",
           title: "¡Consulta Exitosa!",
         });
-        console.log(res.RESPONSE);
         setData(res.RESPONSE);
-        //setOpen(false);
       } else {
-        //setOpen(false);
         Swal.fire("¡Error!", res.STRMESSAGE, "error");
       }
     });
@@ -105,7 +99,6 @@ const RegistroIncidencia = ({
   };
 
   const sendIncidence = () => {
-    console.log("usuarioInci", usuarioInci);
     let validacion = true;
 
     if (estado == "") {
@@ -113,12 +106,12 @@ const RegistroIncidencia = ({
       Swal.fire("¡Error!", "Favor de Seleccionar el siguiente Estado", "error");
     }
 
-    if (usuarioInci == "") {
+    if (!usuarioInci || usuarioInci.trim() === "") {
       validacion = false;
-      Swal.fire("¡Error!", "Favor de Seleccionar a quien se asigna", "error");
+      Swal.fire("¡Error!", "Por favor, seleccione a quién se asigna", "error");
     }
 
-    if (prioridad == "") {
+    if (!prioridad || prioridad.trim() === "") {
       validacion = false;
       Swal.fire("¡Error!", "Favor de Seleccionar la Prioridad", "error");
     }
@@ -135,10 +128,16 @@ const RegistroIncidencia = ({
         Prioridades: prioridad,
       };
 
-      console.log(data);
-
       IncidenciasServices.Incidencias(data, 4).then((res) => {
         if (res.SUCCESS) {
+          if (
+            estado == "f84eaf47-0677-11ef-b2e9-c4346b72f0ba" &&
+            res.RESPONSE[0].ceDescripcion == "ASIGNADA" &&
+            nota == ""
+          ) {
+            sendMail("002", res.RESPONSE[0].Id, res.RESPONSE[0].Emailasignadoa);
+          }
+
           Toast.fire({
             icon: "success",
             title: "¡Incidencia Actualizada!",
@@ -164,16 +163,17 @@ const RegistroIncidencia = ({
         TextoInc: dt.TextoInc,
         AsignadoA: dt.idAsignadoa,
         Prioridades: dt.prId,
-
       };
-      console.log("data", data);
 
       IncidenciasServices.Incidencias(data, 4).then((res) => {
         if (res.SUCCESS) {
+          sendMail("003", res.RESPONSE[0].Id, res.RESPONSE[0].Emailasignadoa);
+
           Toast.fire({
             icon: "success",
             title: "Nota Agregada!",
           });
+
           setNota("");
           consulta();
         } else {
@@ -197,7 +197,6 @@ const RegistroIncidencia = ({
     getEstadoNext(setListEstado, dt.ceDescripcion);
     getUsuarioInci(setListUsuarioInci);
     getPrioridad(setListPrioridad);
-    console.log("dt", dt);
     consulta();
 
     if (dt === "") {
@@ -213,6 +212,7 @@ const RegistroIncidencia = ({
       if (
         dt.ceDescripcion != "RESUELTA" &&
         dt.ceDescripcion != "NUEVA" &&
+        dt.ceDescripcion != "CANCELADA" &&
         dt.ceDescripcion != ""
       ) {
         const intervalId = setInterval(() => {
@@ -247,7 +247,8 @@ const RegistroIncidencia = ({
             <Typography>{EmailRegistra}</Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={2}>
-            {dt.ceDescripcion == "RESUELTA" ? (
+            {dt.ceDescripcion == "RESUELTA" ||
+            dt.ceDescripcion == "CANCELADA" ? (
               ""
             ) : (
               <>
@@ -289,18 +290,25 @@ const RegistroIncidencia = ({
             {dt.ceDescripcion}
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
-            {dt.ceDescripcion == "RESUELTA" ? (
+            {dt.ceDescripcion == "RESUELTA" ||
+            dt.ceDescripcion == "CANCELADA" ? (
               ""
             ) : (
               <>
-                <Typography>Sguiente Estado:</Typography>
-                <SelectFrag
-                  value={estado}
-                  options={ListEstado}
-                  onInputChange={handleFilterEstado}
-                  placeholder={"Seleccione.."}
-                  disabled={false}
-                />
+                {dt.idAsignadoa == user.Id || dt.ceDescripcion == "NUEVA" ? (
+                  <>
+                    <Typography>Sguiente Estado:</Typography>
+                    <SelectFrag
+                      value={estado}
+                      options={ListEstado}
+                      onInputChange={handleFilterEstado}
+                      placeholder={"Seleccione.."}
+                      disabled={false}
+                    />
+                  </>
+                ) : (
+                  ""
+                )}
               </>
             )}
           </Grid>
@@ -350,7 +358,12 @@ const RegistroIncidencia = ({
                   sx={{ display: "flex" }}
                 >
                   <Button
-                    disabled={dt.ceDescripcion == "RESUELTA" ? true : false}
+                    disabled={
+                      dt.ceDescripcion == "RESUELTA" ||
+                      dt.ceDescripcion == "CANCELADA"
+                        ? true
+                        : false
+                    }
                     className={"actualizar"}
                     onClick={() => sendNota()}
                   >

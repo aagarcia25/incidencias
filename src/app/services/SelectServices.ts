@@ -24,7 +24,6 @@ export const getUsuarioInci = (setState: Function) => {
     })
     .then((r) => {
       setState(r.data.RESPONSE);
-      console.log("getusuario", r);
     });
 };
 export const getPrioridad = (setState: Function) => {
@@ -38,7 +37,6 @@ export const getPrioridad = (setState: Function) => {
     })
     .then((r) => {
       setState(r.data.RESPONSE);
-      console.log("getusuario", r);
     });
 };
 
@@ -67,5 +65,19 @@ export const getSLA = (setState: Function, CHID: string) => {
     })
     .then((r) => {
       setState(r.data.RESPONSE[0].tiempo);
+    });
+};
+
+export const sendMail = (CLAVE: string, ID: string, EMAIL: string) => {
+  axios
+    .get(process.env.REACT_APP_APPLICATION_BASE_URL + "sendEmail", {
+      params: { CLAVE, ID, EMAIL },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("jwtToken") || "",
+      },
+    })
+    .then((r) => {
+      return r.data.RESPONSE;
     });
 };
