@@ -69,7 +69,7 @@ export default function MUIXDataGrid(props: any) {
               color: "rgb(84, 3, 3)",
               backgroundColor: "goldenrod",
             },
-            "& .super-app.ACEPTADA": {
+            "& .super-app.EN.VALIDACIÓN": {
               backgroundColor: "yellow",
             },
             "& .super-app.ASIGNADA": {

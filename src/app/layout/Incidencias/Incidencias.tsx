@@ -30,7 +30,6 @@ const Incidencias = () => {
           icon: "success",
           title: "¡Consulta Exitosa!",
         });
-        console.log(res.RESPONSE);
         setData(res.RESPONSE);
         setOpen(false);
       } else {
@@ -46,7 +45,6 @@ const Incidencias = () => {
     setopenModal(true);
   };
   const handleVer = (data: any) => {
-    console.log(data.row);
     setVrows(data.row);
     setTipoOperacion(2);
     setopenModal(true);
@@ -103,8 +101,6 @@ const Incidencias = () => {
   ];
 
   useEffect(() => {
-    console.log("data", data);
-
     consulta();
   }, []);
 
@@ -159,10 +155,10 @@ const Incidencias = () => {
           }}
         >
           <Tooltip
-            title="Una vez que se ha revisado la incidencia y se ha decidido que es válida, se mueve a este estado. Aceptada significa que el equipo responsable ha reconocido el problema y se compromete a abordarlo. Aquí, se puede asignar una prioridad a la incidencia y planificar las próximas acciones para su resolución."
+            title="Una vez que se ha revisado la incidencia y se ha decidido que es válida, se mueve a este estado. En Validación significa que el equipo responsable ha reconocido el problema y se compromete a abordarlo. Aquí, se puede asignar una prioridad a la incidencia y planificar las próximas acciones para su resolución."
             placement="top-start"
           >
-            <Typography>Aceptada</Typography>
+            <Typography>En Validación</Typography>
           </Tooltip>
         </Grid>
         <Grid
@@ -266,7 +262,7 @@ const Incidencias = () => {
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <div style={{ height: 400, width: "100%" }}>
-            <ButtonsAdd handleOpen={handleOpen} agregar={true} />
+            {/* <ButtonsAdd handleOpen={handleOpen} agregar={true} /> */}
             <MUIXDataGrid columns={columnsRel} rows={data} />
           </div>
         </Grid>

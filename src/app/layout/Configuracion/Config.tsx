@@ -22,7 +22,6 @@ const Config = () => {
   const [tipoOperacion, setTipoOperacion] = useState(0);
   const [vrows, setVrows] = useState({});
 
-
   const consulta = () => {
     setOpen(true);
     ConfiguracionesServices.Configuracion({}, 3).then((res) => {
@@ -31,7 +30,6 @@ const Config = () => {
           icon: "success",
           title: "¡Consulta Exitosa!",
         });
-        // console.log(res.RESPONSE);
         setData(res.RESPONSE);
         setOpen(false);
       } else {
@@ -40,7 +38,7 @@ const Config = () => {
       }
     });
   };
-const handleClose = () => {
+  const handleClose = () => {
     setopenModal(false);
     consulta();
   };
@@ -67,30 +65,24 @@ const handleClose = () => {
       width: 200,
 
       renderCell: (v) => {
-        console.log("v antesd return",v.row);
-        
-
         return (
-
           <>
-            
-             <ButtonsEdit
-             handleAccion={handleEdit}
-             row={v}
-             show={true}
-           ></ButtonsEdit>
+            <ButtonsEdit
+              handleAccion={handleEdit}
+              row={v}
+              show={true}
+            ></ButtonsEdit>
             <ButtonsDeleted
-                handleAccion={handleAccion}
-                row={v}
-                show={true}
-              ></ButtonsDeleted>
+              handleAccion={handleAccion}
+              row={v}
+              show={true}
+            ></ButtonsDeleted>
           </>
         );
       },
     },
   ];
   const handleAccion = (v: any) => {
-    
     Swal.fire({
       icon: "info",
       title: "¿Estás seguro de eliminar este registro?",
@@ -104,9 +96,8 @@ const handleClose = () => {
           IdParametro: v.data.row.Id,
           IdUsuario: user.Id,
         };
-        
 
-        ConfiguracionesServices.Configuracion({data},2).then((res) => {
+        ConfiguracionesServices.Configuracion({ data }, 2).then((res) => {
           if (res.SUCCESS) {
             Toast.fire({
               icon: "success",
@@ -126,23 +117,22 @@ const handleClose = () => {
   const handleOpen = () => {
     setTipoOperacion(1);
     setopenModal(true);
-    setVrows("")
+    setVrows("");
   };
   const handleEdit = (data: any) => {
     setTipoOperacion(2);
     setopenModal(true);
     setVrows(data.data);
-    console.log("vdata",data.data);
-
   };
 
   useEffect(() => {
     consulta();
   }, []);
 
-  return (<div>
-    <TitleComponent title={"Configuración"} show={open} />
-    <Grid
+  return (
+    <div>
+      <TitleComponent title={"Configuración"} show={open} />
+      <Grid
         container
         item
         spacing={1}
@@ -171,7 +161,8 @@ const handleClose = () => {
       ) : (
         ""
       )}
-  </div>);
+    </div>
+  );
 };
 
 export default Config;

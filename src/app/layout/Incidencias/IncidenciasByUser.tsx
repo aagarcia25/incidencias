@@ -31,7 +31,6 @@ const IncidenciasByUser = () => {
           icon: "success",
           title: "¡Consulta Exitosa!",
         });
-        console.log(res.RESPONSE);
         setData(res.RESPONSE);
         setOpen(false);
       } else {
@@ -42,7 +41,6 @@ const IncidenciasByUser = () => {
   };
 
   const handleVer = (data: any) => {
-    console.log(data.row);
     setVrows(data.row);
     setTipoOperacion(2);
     setopenModal(true);
@@ -99,14 +97,12 @@ const IncidenciasByUser = () => {
   ];
 
   useEffect(() => {
-    console.log("data", data);
-
     consulta();
   }, []);
 
   return (
     <>
-      <TitleComponent title={"Listado de Incidencias"} show={open} />
+      <TitleComponent title={"Incidencias Asignadas"} show={open} />
       <Grid
         container
         item
@@ -155,10 +151,10 @@ const IncidenciasByUser = () => {
           }}
         >
           <Tooltip
-            title="Una vez que se ha revisado la incidencia y se ha decidido que es válida, se mueve a este estado. Aceptada significa que el equipo responsable ha reconocido el problema y se compromete a abordarlo. Aquí, se puede asignar una prioridad a la incidencia y planificar las próximas acciones para su resolución."
+            title="Una vez que se ha revisado la incidencia y se ha decidido que es válida, se mueve a este estado. En Validación significa que el equipo responsable ha reconocido el problema y se compromete a abordarlo. Aquí, se puede asignar una prioridad a la incidencia y planificar las próximas acciones para su resolución."
             placement="top-start"
           >
-            <Typography>Aceptada</Typography>
+            <Typography>En Validación</Typography>
           </Tooltip>
         </Grid>
         <Grid
