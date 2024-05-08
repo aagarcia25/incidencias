@@ -4,14 +4,16 @@ import { GridColDef, GridCellParams } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import ButtonsAdd from "../../componentes/ButtonsAdd";
 import { ButtonsDetail } from "../../componentes/ButtonsDetail";
 import MUIXDataGrid from "../../componentes/MUIXDataGrid";
 import TitleComponent from "../../componentes/TitleComponent";
 import { Toast } from "../../helpers/Toast";
 import { IncidenciasServices } from "../../services/IncidenciasServices";
 import RegistroIncidencia from "./RegistroIncidencia";
-const Incidencias = () => {
+import { USUARIORESPONSE } from "../../interfaces/UserInfo";
+import { getUser } from "../../services/localStorage";
+const IncidenciasByUser = () => {
+  const user: USUARIORESPONSE = JSON.parse(String(getUser()));
   const [open, setOpen] = useState(false);
   const [openModal, setopenModal] = useState(false);
   const [data, setData] = useState([]);
@@ -19,12 +21,11 @@ const Incidencias = () => {
   const [tipoOperacion, setTipoOperacion] = useState(0);
   const handleClose = () => {
     setopenModal(false);
-    consulta();
   };
 
   const consulta = () => {
     setOpen(true);
-    IncidenciasServices.Incidencias({}, 3).then((res) => {
+    IncidenciasServices.Incidencias({ CHID: user.Id }, 6).then((res) => {
       if (res.SUCCESS) {
         Toast.fire({
           icon: "success",
@@ -39,11 +40,6 @@ const Incidencias = () => {
     });
   };
 
-  const handleOpen = () => {
-    setVrows({});
-    setTipoOperacion(1);
-    setopenModal(true);
-  };
   const handleVer = (data: any) => {
     setVrows(data.row);
     setTipoOperacion(2);
@@ -106,7 +102,7 @@ const Incidencias = () => {
 
   return (
     <>
-      <TitleComponent title={"Listado de Incidencias"} show={open} />
+      <TitleComponent title={"Incidencias Asignadas"} show={open} />
       <Grid
         container
         item
@@ -189,27 +185,6 @@ const Incidencias = () => {
           md={2}
           lg={1}
           style={{
-            backgroundColor: "greenyellow",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%", // Para asegurar la altura completa del Grid
-          }}
-        >
-          <Tooltip
-            title="Cuando la incidencia ha sido solucionada, se mueve a este estado. Resuelta significa que el problema o error ha sido corregido, o que la solicitud ha sido atendida satisfactoriamente. Sin embargo, esto no necesariamente implica que el ciclo de vida de la incidencia haya terminado. Dependiendo del proceso, puede requerir validación o confirmación del usuario para cerrar la incidencia definitivamente."
-            placement="top-start"
-          >
-            <Typography>En Proceso</Typography>
-          </Tooltip>
-        </Grid>
-        <Grid
-          item
-          xs={2}
-          sm={2}
-          md={2}
-          lg={1}
-          style={{
             backgroundColor: "green",
             display: "flex",
             justifyContent: "center",
@@ -262,7 +237,6 @@ const Incidencias = () => {
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <div style={{ height: 400, width: "100%" }}>
-            {/* <ButtonsAdd handleOpen={handleOpen} agregar={true} /> */}
             <MUIXDataGrid columns={columnsRel} rows={data} />
           </div>
         </Grid>
@@ -281,4 +255,4 @@ const Incidencias = () => {
   );
 };
 
-export default Incidencias;
+export default IncidenciasByUser;

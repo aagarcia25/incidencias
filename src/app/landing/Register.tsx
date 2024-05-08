@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import TitleComponent from "../componentes/TitleComponent";
@@ -8,6 +8,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Swal from "sweetalert2";
 import { IncidenciasServices } from "../services/IncidenciasServices";
 import { Toast } from "../helpers/Toast";
+import { sendMail } from "../services/SelectServices";
 const Register = () => {
   const [content, setContent] = useState("");
   const [NombreRegistra, setNombreRegistra] = useState("");
@@ -27,8 +28,6 @@ const Register = () => {
         IdUsuario: "30adc962-7109-11ed-a880-040300000000",
       };
 
-      console.log(data);
-
       IncidenciasServices.Incidencias(data, 1).then((res) => {
         if (res.SUCCESS) {
           Toast.fire({
@@ -38,6 +37,22 @@ const Register = () => {
           setContent("");
           setNombreRegistra("");
           setEmailRegistra("");
+          sendMail("001", res.RESPONSE[0].id, "aagarcia@cecapmex.com");
+          sendMail("004", res.RESPONSE[0].id, EmailRegistra);
+
+          Swal.fire({
+            title: "¡Incidencia Enviada!",
+            icon: "success",
+            html: `Trataremos de solucionar la incidencia los mas pronto posible`,
+            width: 600,
+            padding: "3em",
+            color: "#000000",
+            backdrop: `
+    rgba(0,0,123,0.4)
+    left top
+    no-repeat
+  `,
+          });
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
@@ -67,7 +82,9 @@ const Register = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography>Describe la incidencia, incluyendo imágenes </Typography>
+        <Tooltip title={"Puedes Copiar y Pegar la captura de pantalla"}>
+          <Typography>Describe la incidencia, incluyendo imágenes </Typography>
+        </Tooltip>
       </Grid>
 
       <Grid

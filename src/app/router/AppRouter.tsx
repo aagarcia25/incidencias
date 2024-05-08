@@ -8,6 +8,9 @@ import { getUser } from "../services/localStorage";
 import { AuthRouter } from "./AuthRouter";
 import Estadisticas from "../layout/Panel/Estadisticas";
 import Config from "../layout/Configuracion/Config";
+import IncidenciasByUser from "../layout/Incidencias/IncidenciasByUser";
+import IncidenciaCanceladas from "../layout/Incidencias/IncidenciaCanceladas";
+import IncidenciaResueltas from "../layout/Incidencias/IncidenciaResueltas";
 
 export const AppRouter = ({ login }: { login: boolean }) => {
   const log = login;
@@ -21,7 +24,6 @@ export const AppRouter = ({ login }: { login: boolean }) => {
           path="/"
           element={log ? <Bienvenido user={user} /> : <AuthRouter />}
         />
-
         <Route
           path="/pladin/admin"
           element={log ? <Estadisticas /> : <AuthRouter />}
@@ -33,6 +35,18 @@ export const AppRouter = ({ login }: { login: boolean }) => {
         <Route
           path="/pladin/configuraciones"
           element={log ? <Config /> : <AuthRouter />}
+        />
+        <Route
+          path="/pladin/Incidenciasbyuser"
+          element={log ? <IncidenciasByUser /> : <AuthRouter />}
+        />
+        <Route
+          path="/pladin/Incicanceladas"
+          element={log ? <IncidenciaCanceladas /> : <AuthRouter />}
+        />
+        <Route
+          path="/pladin/Inciresueltas"
+          element={log ? <IncidenciaResueltas /> : <AuthRouter />}
         />
       </Routes>
     </Inicio>
