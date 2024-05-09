@@ -207,7 +207,7 @@ export default function Inicio({ children, user }: Props) {
           {children}
         </Grid>
       </Grid>
-      <FAB></FAB>
+      {/* <FAB></FAB> */}
     </ThemeProvider>
   );
 }
