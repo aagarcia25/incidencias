@@ -5,7 +5,10 @@ import { HashRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./Fonts.css";
 import "./Globals.css";
+import { BloqueoSesion } from "./app/componentes/BloqueoSesion";
+import Validacion from "./app/componentes/Validacion";
 import { USUARIORESPONSE, UserLogin } from "./app/interfaces/UserInfo";
+import Register from "./app/landing/Register";
 import { AppRouter } from "./app/router/AppRouter";
 import { UserServices } from "./app/services/UserServices";
 import {
@@ -21,10 +24,6 @@ import {
   setToken,
   setUser,
 } from "./app/services/localStorage";
-import { BloqueoSesion } from "./app/componentes/BloqueoSesion";
-import Validacion from "./app/componentes/Validacion";
-import Register from "./app/landing/Register";
-import { Slider } from "@mui/material";
 
 function App() {
   const timeout = 900000;

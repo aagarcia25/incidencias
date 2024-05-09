@@ -2,9 +2,7 @@ import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import KPIR from "../../componentes/KPIR";
 import TitleComponent from "../../componentes/TitleComponent";
-import { USUARIORESPONSE } from "../../interfaces/UserInfo";
 import { ConfiguracionesServices } from "../../services/ConfiguracionesServices";
-import { getUser } from "../../services/localStorage";
 
 interface Incidencia {
   Descripcion: string; // Descripción del estado
@@ -14,8 +12,6 @@ interface Incidencia {
 }
 
 const Estadisticas = () => {
-  const [open, setOpen] = useState(false);
-  const user: USUARIORESPONSE = JSON.parse(String(getUser()));
   const [list, setlist] = useState<Incidencia[]>([]);
 
   const asignada = list.find((item) => item?.Descripcion === "ASIGNADA");
@@ -43,7 +39,7 @@ const Estadisticas = () => {
   return (
     <div>
       <>
-        <TitleComponent title={"Panel de Administración"} show={open} />
+        <TitleComponent title={"Panel de Administración"} show={true} />
         <Grid
           container
           item
