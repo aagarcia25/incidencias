@@ -39,7 +39,7 @@ const Estadisticas = () => {
   return (
     <div>
       <>
-        <TitleComponent title={"Panel de Administración"} show={true} />
+        <TitleComponent title={"Panel de Administración"} show={false} />
         <Grid
           container
           item
