@@ -29,6 +29,7 @@ import {
 } from "../../services/SelectServices";
 import { getUser } from "../../services/localStorage";
 import KPI from "../../componentes/KPI";
+import VisorDocumentosOficios from "../../componentes/VisorDocumentosOficios";
 
 const RegistroIncidencia = ({
   handleClose,
@@ -106,12 +107,12 @@ const RegistroIncidencia = ({
       Swal.fire("¡Error!", "Favor de Seleccionar el siguiente Estado", "error");
     }
 
-    if (!usuarioInci || usuarioInci.trim() === "") {
+    if (!usuarioInci || usuarioInci.trim() == "") {
       validacion = false;
       Swal.fire("¡Error!", "Por favor, seleccione a quién se asigna", "error");
     }
 
-    if (!prioridad || prioridad.trim() === "") {
+    if (!prioridad || prioridad.trim() == "") {
       validacion = false;
       Swal.fire("¡Error!", "Favor de Seleccionar la Prioridad", "error");
     }
@@ -199,7 +200,7 @@ const RegistroIncidencia = ({
     getPrioridad(setListPrioridad);
     consulta();
 
-    if (dt === "") {
+    if (dt == "") {
     } else {
       setId(dt?.Id);
       setContent(dt?.TextoInc);
@@ -226,7 +227,7 @@ const RegistroIncidencia = ({
   return (
     <div>
       <ModalForm
-        title={tipo === 1 ? "Agregar Registro" : "Editar Registro"}
+        title={tipo == 1 ? "Agregar Registro" : "Editar Registro"}
         handleClose={handleClose}
       >
         <Grid container spacing={2}>
@@ -317,13 +318,17 @@ const RegistroIncidencia = ({
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ padding: "2%" }}>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <ReactQuill
               readOnly={true}
               value={content}
               onChange={handleChange}
               style={{ height: "300px" }}
             />
+          </Grid>
+
+          <Grid item xs={6}>
+            <VisorDocumentosOficios obj={id} Tipe={1}></VisorDocumentosOficios>
           </Grid>
         </Grid>
 

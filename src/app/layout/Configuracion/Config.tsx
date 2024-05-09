@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import TitleComponent from "../../componentes/TitleComponent";
 import { Grid } from "@mui/material";
-import ButtonsAdd from "../../componentes/ButtonsAdd";
-import MUIXDataGrid from "../../componentes/MUIXDataGrid";
-import { ButtonsDetail } from "../../componentes/ButtonsDetail";
-import { GridCellParams, GridColDef } from "@mui/x-data-grid";
-import ButtonsEdit from "../../componentes/ButtonsEdit";
-import { ConfigModal } from "./ConfigModal";
-import { ConfiguracionesServices } from "../../services/ConfiguracionesServices";
+import { GridColDef } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Toast } from "../../helpers/Toast";
+import ButtonsAdd from "../../componentes/ButtonsAdd";
 import ButtonsDeleted from "../../componentes/ButtonsDeleted";
+import ButtonsEdit from "../../componentes/ButtonsEdit";
+import MUIXDataGrid from "../../componentes/MUIXDataGrid";
+import TitleComponent from "../../componentes/TitleComponent";
+import { Toast } from "../../helpers/Toast";
 import { USUARIORESPONSE } from "../../interfaces/UserInfo";
+import { ConfiguracionesServices } from "../../services/ConfiguracionesServices";
 import { getUser } from "../../services/localStorage";
+import { ConfigModal } from "./ConfigModal";
 
 const Config = () => {
   const user: USUARIORESPONSE = JSON.parse(String(getUser()));

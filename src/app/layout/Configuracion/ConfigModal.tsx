@@ -1,11 +1,10 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
-import ModalForm from "../../componentes/ModalForm";
-import SelectFrag from "../../componentes/SelectFrag";
+import { Button, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ConfiguracionesServices } from "../../services/ConfiguracionesServices";
-import { Toast } from "../../helpers/Toast";
 import Swal from "sweetalert2";
+import ModalForm from "../../componentes/ModalForm";
+import { Toast } from "../../helpers/Toast";
 import { USUARIORESPONSE } from "../../interfaces/UserInfo";
+import { ConfiguracionesServices } from "../../services/ConfiguracionesServices";
 import { getUser } from "../../services/localStorage";
 
 export const ConfigModal = ({

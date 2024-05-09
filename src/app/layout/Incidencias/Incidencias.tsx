@@ -1,10 +1,9 @@
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Grid, Tooltip, Typography } from "@mui/material";
-import { GridColDef, GridCellParams } from "@mui/x-data-grid";
+import { GridCellParams, GridColDef } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import ButtonsAdd from "../../componentes/ButtonsAdd";
 import { ButtonsDetail } from "../../componentes/ButtonsDetail";
 import MUIXDataGrid from "../../componentes/MUIXDataGrid";
 import TitleComponent from "../../componentes/TitleComponent";
@@ -39,11 +38,6 @@ const Incidencias = () => {
     });
   };
 
-  const handleOpen = () => {
-    setVrows({});
-    setTipoOperacion(1);
-    setopenModal(true);
-  };
   const handleVer = (data: any) => {
     setVrows(data.row);
     setTipoOperacion(2);
