@@ -32,8 +32,7 @@ const VisorDocumentosOficios = ({ obj, Tipe }: { obj: any; Tipe: Number }) => {
       // Enviar la petición POST con todos los archivos
       axios
         .post(
-          process.env.REACT_APP_APPLICATION_DOCUMENTACION +
-            "/api/ApiDoc/ListFileSimple",
+          process.env.REACT_APP_APPLICATION_DOCUMENTACION + "/ListFileSimple",
           formData,
           {
             headers: {
@@ -91,8 +90,7 @@ const VisorDocumentosOficios = ({ obj, Tipe }: { obj: any; Tipe: Number }) => {
       formData.append("FILE", item.Archivo, item.NOMBRE);
       formData.append("ADDROUTE", "TRUE");
       let p = axios.post(
-        process.env.REACT_APP_APPLICATION_DOCUMENTACION +
-          "/api/ApiDoc/SaveFile",
+        process.env.REACT_APP_APPLICATION_DOCUMENTACION + "/SaveFile",
         formData,
         {
           headers: {
@@ -148,8 +146,7 @@ const VisorDocumentosOficios = ({ obj, Tipe }: { obj: any; Tipe: Number }) => {
     // Enviar la petición POST con todos los archivos
     axios
       .post(
-        process.env.REACT_APP_APPLICATION_DOCUMENTACION +
-          "/api/ApiDoc/GetByName",
+        process.env.REACT_APP_APPLICATION_DOCUMENTACION + "/GetByName",
         formData,
         {
           headers: {
@@ -218,7 +215,7 @@ const VisorDocumentosOficios = ({ obj, Tipe }: { obj: any; Tipe: Number }) => {
         axios
           .post(
             process.env.REACT_APP_APPLICATION_DOCUMENTACION +
-              "/api/ApiDoc/DeleteFileByRoute",
+              "/DeleteFileByRoute",
             formData,
             {
               headers: {

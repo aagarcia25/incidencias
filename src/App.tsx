@@ -33,14 +33,11 @@ function App() {
   const jwt = query.get("jwt");
   const refjwt = query.get("rf");
   const idapp = query.get("IdApp");
-
   const [bloqueoStatus, setBloqueoStatus] = useState<boolean>();
   const [login, setlogin] = useState<boolean>(false);
   const [acceso, setAcceso] = useState(false);
   const [contrseñaValida, setContraseñaValida] = useState(true);
-
   const [vista, setVista] = useState(false);
-
   const buscaUsuario = (id: string) => {
     let data = {
       IdUsuario: id,
