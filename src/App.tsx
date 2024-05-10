@@ -8,7 +8,6 @@ import "./Globals.css";
 import { BloqueoSesion } from "./app/componentes/BloqueoSesion";
 import Validacion from "./app/componentes/Validacion";
 import { USUARIORESPONSE, UserLogin } from "./app/interfaces/UserInfo";
-import Register from "./app/landing/Register";
 import { AppRouter } from "./app/router/AppRouter";
 import { UserServices } from "./app/services/UserServices";
 import {
@@ -29,7 +28,7 @@ function App() {
   const timeout = 900000;
   const urlParams = window.location.search;
   const query = new URLSearchParams(urlParams);
-  const tipo = query.get("tipo");
+
   const jwt = query.get("jwt");
   const refjwt = query.get("rf");
   const idapp = query.get("IdApp");
@@ -38,8 +37,6 @@ function App() {
   const [login, setlogin] = useState<boolean>(false);
   const [acceso, setAcceso] = useState(false);
   const [contrseñaValida, setContraseñaValida] = useState(true);
-
-  const [vista, setVista] = useState(false);
 
   const buscaUsuario = (id: string) => {
     let data = {
@@ -133,88 +130,76 @@ function App() {
   });
 
   useLayoutEffect(() => {
-    if (tipo == "1") {
-      setVista(true);
-    } else {
-      if (jwt && refjwt && getToken() && getRfToken()) {
-        localStorage.clear();
+    if (jwt && refjwt && getToken() && getRfToken()) {
+      localStorage.clear();
+    }
+    if (
+      !getToken() &&
+      !getRfToken() &&
+      jwt !== null &&
+      refjwt !== null &&
+      !acceso &&
+      bloqueoStatus === undefined
+    ) {
+      const decoded: UserLogin = jwt_decode(String(jwt));
+
+      if ((decoded.exp - Date.now() / 1000) / 60 > 1) {
+        setToken(jwt);
+        setRfToken(refjwt);
+        setIdApp(idapp);
+        var ventana = window.self;
+        ventana.location.replace(String(process.env.REACT_APP_APPLICATION_ENV));
+      } else {
+        Swal.fire({
+          title: "Token no valido",
+          showDenyButton: false,
+          showCancelButton: false,
+          confirmButtonText: "Aceptar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            var ventana = window.self;
+            ventana.location.replace(
+              String(process.env.REACT_APP_APPLICATION_BASE_URL_LOGIN)
+            );
+          }
+        });
       }
-      if (
-        !getToken() &&
-        !getRfToken() &&
-        jwt !== null &&
-        refjwt !== null &&
-        !acceso &&
-        bloqueoStatus === undefined
-      ) {
-        const decoded: UserLogin = jwt_decode(String(jwt));
+    }
 
-        if ((decoded.exp - Date.now() / 1000) / 60 > 1) {
-          setToken(jwt);
-          setRfToken(refjwt);
-          setIdApp(idapp);
-          var ventana = window.self;
-          ventana.location.replace(
-            String(process.env.REACT_APP_APPLICATION_ENV)
-          );
-        } else {
-          Swal.fire({
-            title: "Token no valido",
-            showDenyButton: false,
-            showCancelButton: false,
-            confirmButtonText: "Aceptar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              localStorage.clear();
-              var ventana = window.self;
-              ventana.location.replace(
-                String(process.env.REACT_APP_APPLICATION_BASE_URL_LOGIN)
-              );
-            }
-          });
-        }
-      }
+    if (
+      !jwt &&
+      !refjwt &&
+      bloqueoStatus === undefined &&
+      !acceso &&
+      !login &&
+      getToken() &&
+      getRfToken()
+    ) {
+      const decoded: UserLogin = jwt_decode(String(getToken()));
 
-      if (
-        !jwt &&
-        !refjwt &&
-        bloqueoStatus === undefined &&
-        !acceso &&
-        !login &&
-        getToken() &&
-        getRfToken()
-      ) {
-        const decoded: UserLogin = jwt_decode(String(getToken()));
-
-        if ((decoded.exp - Date.now() / 1000) / 60 > 5) {
-          verificatoken(true);
-        } else {
-          handleOnIdle();
-        }
+      if ((decoded.exp - Date.now() / 1000) / 60 > 5) {
+        verificatoken(true);
+      } else {
+        handleOnIdle();
       }
     }
   }, [bloqueoStatus]);
 
   return (
     <div>
-      {vista ? (
-        <Register></Register>
+      {bloqueoStatus ? (
+        <BloqueoSesion handlePassword={handleOnActive} />
+      ) : acceso ? (
+        <>
+          <HashRouter basename={"/"}>
+            <AppRouter login={login} />
+          </HashRouter>
+        </>
+      ) : !contrseñaValida ? (
+        <Validacion />
       ) : (
-        <div>
-          {bloqueoStatus ? (
-            <BloqueoSesion handlePassword={handleOnActive} />
-          ) : acceso ? (
-            <>
-              <HashRouter basename={"/"}>
-                <AppRouter login={login} />
-              </HashRouter>
-            </>
-          ) : !contrseñaValida ? (
-            <Validacion />
-          ) : (
-            ""
-          )}
-        </div>
+        ""
       )}
     </div>
   );
