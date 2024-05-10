@@ -46,17 +46,23 @@ const Register = () => {
           Swal.fire({
             title: "¡Incidencia Enviada!",
             icon: "success",
-            html: `Trataremos de solucionar la incidencia los mas pronto posible`,
+            html: "Trataremos de solucionar la incidencia lo más pronto posible",
             width: 600,
             padding: "3em",
             color: "#000000",
             backdrop: `
-    rgba(0,0,123,0.4)
-    left top
-    no-repeat
-  `,
+      rgba(0,0,123,0.4)
+      left top
+      no-repeat
+    `,
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: "Ok",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.close(); // Intenta cerrar la pestaña si el usuario confirma
+            }
           });
-          window.close();
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
