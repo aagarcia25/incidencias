@@ -60,7 +60,7 @@ const Register = () => {
             confirmButtonText: "Ok",
           }).then((result) => {
             if (result.isConfirmed) {
-              window.close(); // Intenta cerrar la pestaña si el usuario confirma
+              window.location.href = "https://nl.gob.mx/";
             }
           });
         } else {
