@@ -56,6 +56,7 @@ const Register = () => {
     no-repeat
   `,
           });
+          window.close();
         } else {
           Swal.fire("¡Error!", res.STRMESSAGE, "error");
         }
