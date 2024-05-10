@@ -11,6 +11,7 @@ import Config from "../layout/Configuracion/Config";
 import IncidenciasByUser from "../layout/Incidencias/IncidenciasByUser";
 import IncidenciaCanceladas from "../layout/Incidencias/IncidenciaCanceladas";
 import IncidenciaResueltas from "../layout/Incidencias/IncidenciaResueltas";
+import Register from "../landing/Register";
 
 export const AppRouter = ({ login }: { login: boolean }) => {
   const log = login;
@@ -20,6 +21,7 @@ export const AppRouter = ({ login }: { login: boolean }) => {
     <Inicio user={user}>
       <Routes>
         <Route path="/*" element={log ? <Eo404 /> : <AuthRouter />} />
+        <Route path="/pladin/registrar" element={<Register></Register>} />
         <Route
           path="/"
           element={log ? <Bienvenido user={user} /> : <AuthRouter />}
