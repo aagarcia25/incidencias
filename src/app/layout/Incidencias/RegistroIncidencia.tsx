@@ -298,7 +298,7 @@ const RegistroIncidencia = ({
               <>
                 {dt.idAsignadoa == user.Id || dt.ceDescripcion == "NUEVA" ? (
                   <>
-                    <Typography>Sguiente Estado:</Typography>
+                    <Typography>Siguiente Estado:</Typography>
                     <SelectFrag
                       value={estado}
                       options={ListEstado}
