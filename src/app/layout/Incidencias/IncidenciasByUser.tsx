@@ -20,6 +20,7 @@ const IncidenciasByUser = () => {
   const [vrows, setVrows] = useState({});
   const [tipoOperacion, setTipoOperacion] = useState(0);
   const handleClose = () => {
+    consulta();
     setopenModal(false);
   };
 

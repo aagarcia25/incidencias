@@ -1378,7 +1378,7 @@ button.regresar:hover {
 
 button:hover {
   background-color: hsl(0, 0%, 100%);
-  color: rgb(7, 7, 7);
+  color: rgb(230, 221, 221);
 }
 
 .editar:hover {
