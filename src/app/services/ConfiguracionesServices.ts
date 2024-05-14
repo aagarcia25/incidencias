@@ -10,6 +10,8 @@ export class ConfiguracionesServices {
       return await get("Configuracion", data);
     } else if (tipo === 4) {
       return await put("Configuracion", data);
+    } else if (tipo === 5) {
+      return await post("getParametro", data);
     } else {
       return {
         RESPONSE: null,

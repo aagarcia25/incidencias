@@ -27,7 +27,6 @@ export const ConfigModal = ({
   const handleEdit = () => {
     let data = {
       IdParametro: id,
-
       Nombre: nombre,
       Valor: valor,
       Slug: slug,
