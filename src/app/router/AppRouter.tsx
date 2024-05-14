@@ -11,6 +11,7 @@ import Config from "../layout/Configuracion/Config";
 import IncidenciasByUser from "../layout/Incidencias/IncidenciasByUser";
 import IncidenciaCanceladas from "../layout/Incidencias/IncidenciaCanceladas";
 import IncidenciaResueltas from "../layout/Incidencias/IncidenciaResueltas";
+import IncidenciasPorValidar from "../layout/Incidencias/IncidenciasPorValidar";
 
 export const AppRouter = ({ login }: { login: boolean }) => {
   const log = login;
@@ -47,6 +48,10 @@ export const AppRouter = ({ login }: { login: boolean }) => {
         <Route
           path="/pladin/Inciresueltas"
           element={log ? <IncidenciaResueltas /> : <AuthRouter />}
+        />
+        <Route
+          path="/pladin/Incivalidacion"
+          element={log ? <IncidenciasPorValidar /> : <AuthRouter />}
         />
       </Routes>
     </Inicio>

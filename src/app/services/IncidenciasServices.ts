@@ -18,6 +18,8 @@ export class IncidenciasServices {
       return await get("getIncidenciasCanceladas", data);
     } else if (tipo === 8) {
       return await get("getIncidenciasResueltas", data);
+    } else if (tipo === 9) {
+      return await get("getIncidenciasPorValidar", data);
     } else {
       return {
         RESPONSE: null,
