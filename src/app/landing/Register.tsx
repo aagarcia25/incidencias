@@ -10,14 +10,31 @@ import VisorDocumentosOficios from "../componentes/VisorDocumentosOficios";
 import { Toast } from "../helpers/Toast";
 import { IncidenciasServices } from "../services/IncidenciasServices";
 import { sendMail } from "../services/SelectServices";
+import { ConfiguracionesServices } from "../services/ConfiguracionesServices";
 const Register = () => {
   const [content, setContent] = useState("");
   const [NombreRegistra, setNombreRegistra] = useState("");
   const [EmailRegistra, setEmailRegistra] = useState("");
   const [uuidid, setuuidid] = useState("");
+  const [EmailI, setEmailI] = useState("aagarcia@cecapmex.com");
 
   const handleChange = (value: any) => {
     setContent(value);
+  };
+
+  const getEmail = () => {
+    let data = {
+      Nombre: "EMAIL_RECIBIDOR",
+    };
+
+    ConfiguracionesServices.Configuracion(data, 5).then((res) => {
+      if (res.SUCCESS) {
+        console.log(res.RESPONSE[0].Valor);
+        setEmailI(res.RESPONSE[0].Valor);
+      } else {
+        Swal.fire("¡Error!", res.STRMESSAGE, "error");
+      }
+    });
   };
 
   const sendIncidence = () => {
@@ -40,7 +57,7 @@ const Register = () => {
           setContent("");
           setNombreRegistra("");
           setEmailRegistra("");
-          sendMail("001", res.RESPONSE[0].id, "aagarcia@cecapmex.com");
+          sendMail("001", res.RESPONSE[0].id, EmailI);
           sendMail("004", res.RESPONSE[0].id, EmailRegistra);
 
           Swal.fire({
@@ -83,6 +100,7 @@ const Register = () => {
   };
 
   useEffect(() => {
+    getEmail();
     setuuidid(uuidv4());
   }, []);
 

@@ -296,7 +296,9 @@ const RegistroIncidencia = ({
               ""
             ) : (
               <>
-                {dt.idAsignadoa == user.Id || dt.ceDescripcion == "NUEVA" ? (
+                {dt.idAsignadoa == user.Id ||
+                dt.ceDescripcion == "NUEVA" ||
+                dt.ceDescripcion == "EN VALIDACIÓN" ? (
                   <>
                     <Typography>Siguiente Estado:</Typography>
                     <SelectFrag
