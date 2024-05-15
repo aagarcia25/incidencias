@@ -191,13 +191,13 @@ export default function Navigator(props: DrawerProps, logoFijo: any) {
           <ListItemText
             key={Math.random()}
             primary={
-              <Tooltip title={"Cerrar Sessión"}>
+              <Tooltip title={"Cerrar Sesión"}>
                 <Typography
                   variant="h5"
                   className="menu-Typography"
                   gutterBottom
                 >
-                  Cerrar Sessión
+                  Cerrar Sesión
                 </Typography>
               </Tooltip>
             }
