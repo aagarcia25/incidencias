@@ -66,7 +66,7 @@ const Register = () => {
             html: "Trataremos de solucionar la incidencia lo más pronto posible",
             width: 600,
             padding: "3em",
-            color: "#000000",
+            color: "#8a8383",
             backdrop: `
       rgba(0,0,123,0.4)
       left top
@@ -142,7 +142,7 @@ const Register = () => {
             <TextField
               fullWidth
               id="standard-basic"
-              label="Correo Electronico"
+              label="Correo Electrónico"
               variant="outlined"
               required
               autoComplete="off"
