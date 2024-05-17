@@ -67,7 +67,7 @@ const Register = () => {
             width: 600,
             padding: "3em",
             backdrop: `
-      rgba(0,0,123,0.4)
+      rgba(255,0,255,0.3)
       left top
       no-repeat
     `,
