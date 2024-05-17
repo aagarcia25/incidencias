@@ -66,9 +66,8 @@ const Register = () => {
             html: "Trataremos de solucionar la incidencia lo más pronto posible",
             width: 600,
             padding: "3em",
-            color: "#000000",
             backdrop: `
-      rgba(0,0,123,0.4)
+      rgba(255,0,255,0.3)
       left top
       no-repeat
     `,
@@ -142,7 +141,7 @@ const Register = () => {
             <TextField
               fullWidth
               id="standard-basic"
-              label="Correo Electronico"
+              label="Correo Electrónico"
               variant="outlined"
               required
               autoComplete="off"
@@ -186,6 +185,13 @@ const Register = () => {
           onClick={() => sendIncidence()}
           variant="contained"
           endIcon={<SendIcon />}
+          sx={{
+            backgroundColor: "black",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "darkgray",
+            },
+          }}
         >
           Enviar Incidencia
         </Button>

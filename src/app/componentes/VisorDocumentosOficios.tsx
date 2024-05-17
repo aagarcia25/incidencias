@@ -313,7 +313,7 @@ const VisorDocumentosOficios = ({ obj, Tipe }: { obj: any; Tipe: Number }) => {
                 title={
                   <React.Fragment>
                     <Typography color="inherit">Cargar Documentos</Typography>
-                    {"Permite la carga de Documentos de Forma Masiva "}
+                    {"Permite la carga de Documentos"}
                   </React.Fragment>
                 }
               >
