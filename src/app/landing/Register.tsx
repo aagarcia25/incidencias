@@ -66,7 +66,6 @@ const Register = () => {
             html: "Trataremos de solucionar la incidencia lo más pronto posible",
             width: 600,
             padding: "3em",
-            color: "#8a8383",
             backdrop: `
       rgba(0,0,123,0.4)
       left top
@@ -186,6 +185,13 @@ const Register = () => {
           onClick={() => sendIncidence()}
           variant="contained"
           endIcon={<SendIcon />}
+          sx={{
+            backgroundColor: "black",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "darkgray",
+            },
+          }}
         >
           Enviar Incidencia
         </Button>
