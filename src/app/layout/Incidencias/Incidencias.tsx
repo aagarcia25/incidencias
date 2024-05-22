@@ -1,5 +1,5 @@
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { Grid, Tooltip, Typography } from "@mui/material";
+import { Button, Grid, Tooltip, Typography } from "@mui/material";
 import { GridCellParams, GridColDef } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
@@ -10,18 +10,26 @@ import TitleComponent from "../../componentes/TitleComponent";
 import { Toast } from "../../helpers/Toast";
 import { IncidenciasServices } from "../../services/IncidenciasServices";
 import RegistroIncidencia from "./RegistroIncidencia";
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import axios from "axios";
+import Progress from "../../componentes/Progress";
+
 const Incidencias = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setopenModal] = useState(false);
   const [data, setData] = useState([]);
   const [vrows, setVrows] = useState({});
   const [tipoOperacion, setTipoOperacion] = useState(0);
+  const [show, setShow] = useState(false);
+
+  
   const handleClose = () => {
     setopenModal(false);
     consulta();
   };
 
   const consulta = () => {
+
     setOpen(true);
     IncidenciasServices.Incidencias({}, 3).then((res) => {
       if (res.SUCCESS) {
@@ -35,6 +43,7 @@ const Incidencias = () => {
         setOpen(false);
         Swal.fire("¡Error!", res.STRMESSAGE, "error");
       }
+      
     });
   };
 
@@ -42,6 +51,28 @@ const Incidencias = () => {
     setVrows(data.row);
     setTipoOperacion(2);
     setopenModal(true);
+  };
+
+  const handleDownloadPDF = async (row:any,data:any) => {
+ 
+    setShow(true);
+  
+    try {
+      const response = await axios.post(process.env.REACT_APP_APPLICATION_BASE_URL + '/generate-pdf', row, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'reporte.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+    setShow(false);
+
   };
 
   const columnsRel: GridColDef[] = [
@@ -85,9 +116,17 @@ const Incidencias = () => {
                 icon={<RemoveRedEyeIcon />}
                 row={v}
               ></ButtonsDetail>
+              
             ) : (
               ""
             )}
+            <ButtonsDetail
+                title={"Reporte"}
+                handleFunction={() => handleDownloadPDF(v.row, data)}
+                show={true}
+                icon={<NewspaperIcon />}
+                row={v}
+              ></ButtonsDetail>
           </>
         );
       },
@@ -96,11 +135,13 @@ const Incidencias = () => {
 
   useEffect(() => {
     consulta();
+    
   }, []);
 
   return (
     <>
       <TitleComponent title={"Listado de Incidencias"} show={open} />
+      <Progress open={show}></Progress>
       <Grid
         container
         item
