@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { FavIconAvisos } from "../avisosPAUA/componentes/FavIconAvisos";
 
 export default function Bienvenido({ user }: { user: any }) {
   return (
@@ -9,6 +10,7 @@ export default function Bienvenido({ user }: { user: any }) {
         justifyContent="center"
         alignItems={"center"}
       ></Box>
+      <FavIconAvisos/>
     </Box>
   );
 }
